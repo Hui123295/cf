@@ -1,0 +1,54 @@
+import random
+
+class Player:
+    def __init__(self, name, health, ammo):
+        self.name = name
+        self.health = health
+        self.ammo = ammo
+
+    def shoot(self, enemy):
+        if self.ammo > 0:
+            damage = random.randint(10, 20)
+            enemy.take_damage(damage)
+            self.ammo -= 1
+            print(f"{self.name}射击了{enemy.name}，造成了{damage}点伤害！")
+        else:
+            print(f"{self.name}没有弹药了！")
+
+    def take_damage(self, damage):
+        self.health -= damage
+        if self.health <= 0:
+            print(f"{self.name}被击败了！")
+        else:
+            print(f"{self.name}受到了{damage}点伤害，剩余生命值：{self.health}")
+
+class Game:
+    def __init__(self, player1, player2):
+        self.player1 = player1
+        self.player2 = player2
+
+    def play(self):
+        print("游戏开始！")
+        while self.player1.health > 0 and self.player2.health > 0:
+            attacker = random.choice([self.player1, self.player2])
+            defender = self.player2 if attacker == self.player1 else self.player1
+            attacker.shoot(defender)
+            print("")
+
+        print("游戏结束！")
+        if self.player1.health <= 0 and self.player2.health <= 0:
+            print("平局！")
+        elif self.player1.health <= 0:
+            print(f"{self.player2.name}获胜！")
+        else:
+            print(f"{self.player1.name}获胜！")
+
+# 创建两个玩家
+player1_name = input("请输入玩家1的名称：")
+player2_name = input("请输入玩家2的名称：")
+player1 = Player(player1_name, 100, 10)
+player2 = Player(player2_name, 100, 10)
+
+# 创建游戏实例并开始游戏
+game = Game(player1, player2)
+game.play()
